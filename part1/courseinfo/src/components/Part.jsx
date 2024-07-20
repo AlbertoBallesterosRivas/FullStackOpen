@@ -1,7 +1,7 @@
-const Header = ({ part, exercises }) => {
+const Header = ({ part}) => {
   return (
     <p>
-      {part} {exercises}
+      {part.name} {part.exercises}
     </p>
   );
 };
