@@ -1,10 +1,17 @@
 import { useState } from "react";
 
-// a proper place to define a component
-const Statistics = ({ statisticName, statisticValue }) => {
+const Button = ({ handleClick, text }) => {
+  return (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  );
+};
+
+const StatisticLine = ({ text, value }) => {
   return (
     <p>
-      {statisticName} {statisticValue} {statisticName == "positive" ? "%" : ""}
+      {text} {value} {text == "positive" ? "%" : ""}
     </p>
   );
 };
@@ -18,13 +25,13 @@ const App = () => {
   const handleClick = (type) => {
     switch (type) {
       case "good":
-        setGood(good + 1);
+        setGood(prevGood => prevGood + 1);
         break;
       case "neutral":
-        setNeutral(neutral + 1);
+        setNeutral(prevNeutral => prevNeutral + 1);
         break;
       case "bad":
-        setBad(bad + 1);
+        setBad(prevBad => prevBad + 1);
         break;
       default:
         return;
@@ -38,20 +45,20 @@ const App = () => {
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => handleClick("good")}>good</button>
-      <button onClick={() => handleClick("neutral")}>neutral</button>
-      <button onClick={() => handleClick("bad")}>bad</button>
+      <Button handleClick={() => handleClick("good")} text={"good"} />
+      <Button handleClick={() => handleClick("neutral")} text={"neutral"} />
+      <Button handleClick={() => handleClick("bad")} text={"bad"} />
       <h1>statistics</h1>
       {total == 0 ? (
         "No feedback given"
       ) : (
         <>
-          <Statistics statisticName={"good"} statisticValue={good} />
-          <Statistics statisticName={"neutral"} statisticValue={neutral} />
-          <Statistics statisticName={"bad"} statisticValue={bad} />
-          <Statistics statisticName={"all"} statisticValue={total} />
-          <Statistics statisticName={"average"} statisticValue={average} />
-          <Statistics statisticName={"positive"} statisticValue={positive} />
+          <StatisticLine text="good" value ={good} />
+          <StatisticLine text="neutral" value ={neutral} />
+          <StatisticLine text="bad" value ={bad} />
+          <StatisticLine text="all" value ={total} />
+          <StatisticLine text="average" value ={average} />
+          <StatisticLine text="positive" value ={positive} />
         </>
       )}
     </div>
