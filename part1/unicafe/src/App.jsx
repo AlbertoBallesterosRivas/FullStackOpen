@@ -1,18 +1,17 @@
 import { useState } from "react";
 
 const Button = ({ handleClick, text }) => {
-  return (
-    <button onClick={handleClick}>
-      {text}
-    </button>
-  );
+  return <button onClick={handleClick}>{text}</button>;
 };
 
 const StatisticLine = ({ text, value }) => {
   return (
-    <p>
-      {text} {value} {text == "positive" ? "%" : ""}
-    </p>
+    <tr>
+      <td>{text}</td>
+      <td>
+        {value} {text == "positive" ? "%" : ""}
+      </td>
+    </tr>
   );
 };
 
@@ -25,13 +24,13 @@ const App = () => {
   const handleClick = (type) => {
     switch (type) {
       case "good":
-        setGood(prevGood => prevGood + 1);
+        setGood((prevGood) => prevGood + 1);
         break;
       case "neutral":
-        setNeutral(prevNeutral => prevNeutral + 1);
+        setNeutral((prevNeutral) => prevNeutral + 1);
         break;
       case "bad":
-        setBad(prevBad => prevBad + 1);
+        setBad((prevBad) => prevBad + 1);
         break;
       default:
         return;
@@ -53,12 +52,19 @@ const App = () => {
         "No feedback given"
       ) : (
         <>
-          <StatisticLine text="good" value ={good} />
-          <StatisticLine text="neutral" value ={neutral} />
-          <StatisticLine text="bad" value ={bad} />
-          <StatisticLine text="all" value ={total} />
-          <StatisticLine text="average" value ={average} />
-          <StatisticLine text="positive" value ={positive} />
+          <table>
+            <StatisticLine text="good" value={good} />
+
+            <StatisticLine text="neutral" value={neutral} />
+
+            <StatisticLine text="bad" value={bad} />
+
+            <StatisticLine text="all" value={total} />
+
+            <StatisticLine text="average" value={average} />
+
+            <StatisticLine text="positive" value={positive} />
+          </table>
         </>
       )}
     </div>
