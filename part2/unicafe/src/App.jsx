@@ -18,7 +18,6 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    console.log("button clicked", event.target);
 
     if (!persons.some((person) => person.name == newName)) {
       const newPerson = {
@@ -34,6 +33,11 @@ const App = () => {
     } else {
       alert(`${newName} is already added to phonebook`);
     }
+  };
+
+  const removePerson = (id) => {
+    personService.remove(id)
+    setPersons(persons.filter(person => person.id !== id));
   };
 
   const handleNameChange = (event) => {
@@ -61,7 +65,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} removePerson={removePerson} />
     </div>
   );
 };

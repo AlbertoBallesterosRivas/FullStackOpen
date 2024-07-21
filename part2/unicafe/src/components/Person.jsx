@@ -1,7 +1,13 @@
-const Person = ({ name, number }) => {
+const Person = ({ name, number, id, removePerson }) => {
+
+    const handleDeleteClick = () => {
+        
+        window.confirm(`Delete '${name}'?`) ? removePerson(id):""
+    }
   return (
-    <li key={name}>
+    <li key={id}>
       {name} {number}
+      <button onClick={handleDeleteClick}>delete</button>
     </li>
   );
 };
