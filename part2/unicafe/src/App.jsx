@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-const Person = ({ name }) => {
-  return <li key={name}>{name}</li>;
+const Person = ({ name, number }) => {
+  return <li key={name}>{name} {number}</li>;
 };
 
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -14,10 +15,12 @@ const App = () => {
 
     if(!persons.some(person => person.name == newName)) {
       const newPerson = {
-        name: newName
+        name: newName,
+        number: newNumber
       }
       setPersons(persons.concat(newPerson));
       setNewName("");
+      setNewNumber("");
     }
     else {
       alert(`${newName} is already added to phonebook`)
@@ -25,8 +28,11 @@ const App = () => {
   };
 
   const handleNameChange = (event) => {
-    console.log(event.target.value);
     setNewName(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
   };
 
   return (
@@ -36,6 +42,8 @@ const App = () => {
         <div>
           name: <input value={newName} onChange={handleNameChange} />
         </div>
+        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
+
         <div>
           <button type="submit">add</button>
         </div>
@@ -43,7 +51,7 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {persons.map((person) => (
-          <Person name={person.name} />
+          <Person name={person.name} number={person.number} />
         ))}
       </ul>
     </div>
