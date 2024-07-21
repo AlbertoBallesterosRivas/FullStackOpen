@@ -19,25 +19,38 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if (!persons.some((person) => person.name == newName)) {
-      const newPerson = {
-        name: newName,
-        number: newNumber,
-      };
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+    };
 
+    if (!persons.some((person) => person.name == newName)) {
       personService.create(newPerson).then((response) => {
         setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
+
       });
     } else {
-      alert(`${newName} is already added to phonebook`);
+      if(window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )) {
+        const oldPerson = persons.find(person => person.name === newName)
+        personService.update(oldPerson.id, newPerson).then((response) => {
+          // setPersons(persons.concat(response.data));
+          setPersons(persons.map(person =>
+            person.id === oldPerson.id ? { ...person, name: newName, number: newNumber, } : person
+            )
+          );
+        });
+      }
+
     }
+    setNewName("");
+    setNewNumber("");
   };
 
   const removePerson = (id) => {
-    personService.remove(id)
-    setPersons(persons.filter(person => person.id !== id));
+    personService.remove(id);
+    setPersons(persons.filter((person) => person.id !== id));
   };
 
   const handleNameChange = (event) => {
@@ -60,6 +73,7 @@ const App = () => {
       <h2>add a new</h2>
       <Form
         addPerson={addPerson}
+        newName={newName}
         newNumber={newNumber}
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}

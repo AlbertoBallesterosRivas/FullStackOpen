@@ -1,9 +1,7 @@
 const Person = ({ name, number, id, removePerson }) => {
-
-    const handleDeleteClick = () => {
-        
-        window.confirm(`Delete '${name}'?`) ? removePerson(id):""
-    }
+  const handleDeleteClick = () => {
+    window.confirm(`Delete '${name}'?`) ? removePerson(id) : "";
+  };
   return (
     <li key={id}>
       {name} {number}
