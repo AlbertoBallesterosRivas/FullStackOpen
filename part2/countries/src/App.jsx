@@ -15,22 +15,13 @@ const App = () => {
     });
   }, []);
 
-  const removePerson = (id) => {
-    personService.remove(id);
-    setPersons(persons.filter((person) => person.id !== id));
-  };
-
-  const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
-
-  const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
-  };
-
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
+
+  const handleCountryClick = (country) => {
+    setFilter(country.name.common)
+  }
 
   const filteredCountries = countries.filter((country) =>
     country.name.common.toLowerCase().includes(filter.toLowerCase())
@@ -59,7 +50,7 @@ const App = () => {
             </div>
           ))
         ) : filteredCountries.length <= 10 ? (
-          filteredCountries.map((country) => <li>{country.name.common}</li>)
+          filteredCountries.map((country) => <li><span>{country.name.common}</span><button onClick={() => handleCountryClick(country)}>show</button></li>)
         ) : (
           <span>Too many matches, specify another filter</span>
         )}
