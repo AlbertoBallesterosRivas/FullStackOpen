@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
 const Person = require('./models/person')
 const app = express();
 
@@ -72,28 +73,37 @@ app.delete("/api/persons/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
+  console.log(body)
+  // if (!body.name) {
+  //   return response.status(400).json({
+  //     error: "name missing"
+  //   });
+  // }else if (!body.number) {
+  //   return response.status(400).json({
+  //     error: "number missing"
+  //   });
+  // }else if (persons.some(person => person.name === body.name)) {
+  //   return response.status(400).json({
+  //     error: "name must be unique"
+  //   });
+  // }
 
-  if (!body.name) {
-    return response.status(400).json({
-      error: "name missing"
-    });
-  }else if (!body.number) {
-    return response.status(400).json({
-      error: "number missing"
-    });
-  }else if (persons.some(person => person.name === body.name)) {
-    return response.status(400).json({
-      error: "name must be unique"
-    });
-  }
+  // const person = {
+  //   name: body.name,
+  //   number: body.number,
+  // };
 
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: Math.floor(Math.random() * 9999999999999)
-  };
+  })
 
-  persons = persons.concat(person);
+  person.save().then(result => {
+    console.log('person saved!')
+    mongoose.connection.close()
+  })
+
+  // persons = persons.concat(person);
 
   response.json(person);
 });
