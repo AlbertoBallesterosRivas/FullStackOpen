@@ -48,20 +48,31 @@ app.get('/api/persons', (request, response) => {
 
 app.get("/info", (request, response) => {
   const currentTime = new Date();
-  response.send(
-    `<p>Phonebook has info for ${persons.length} people</p></br><p>${currentTime}</p>`
-  );
+
+  Person.find({}).then(persons => {
+    response.send(
+      `<p>Phonebook has info for ${persons.length} people</p></br><p>${currentTime}</p>`
+    );
+  })
+
+  // response.send(
+  //   `<p>Phonebook has info for ${persons.length} people</p></br><p>${currentTime}</p>`
+  // );
 });
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = request.params.id;
-  const person = persons.find(person => person.id === id);
+  // const id = request.params.id;
+  // const person = persons.find(person => person.id === id);
 
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+  // if (person) {
+  //   response.json(person);
+  // } else {
+  //   response.status(404).end();
+  // }
+
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
 });
 
 // app.delete("/api/persons/:id", (request, response) => {
