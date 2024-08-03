@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [message, setMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState("");
 
   useEffect(() => {
     personService.getAll().then((response) => {
@@ -27,35 +28,43 @@ const App = () => {
     };
 
     if (!persons.some((person) => person.name == newName)) {
-      personService.create(newPerson).then((response) => {
-        setPersons(persons.concat(response.data));
-        setMessage(
-          `Added '${newPerson.name}'`
-        )
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-      });
+      personService
+        .create(newPerson)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setMessage(`Added '${newPerson.name}'`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          // this is the way to access the error message
+          console.log(error.response.data.error);
+          setMessage(error.response.data.error);
+          setNotificationType("error");
+        });
     } else {
-      if(window.confirm(
-        `${newName} is already added to phonebook, replace the old number with a new one?`
-      )) {
-        const oldPerson = persons.find(person => person.name === newName)
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const oldPerson = persons.find((person) => person.name === newName);
         personService.update(oldPerson.id, newPerson).then((response) => {
           // setPersons(persons.concat(response.data));
-          setPersons(persons.map(person =>
-            person.id === oldPerson.id ? { ...person, name: newName, number: newNumber, } : person
+          setPersons(
+            persons.map((person) =>
+              person.id === oldPerson.id
+                ? { ...person, name: newName, number: newNumber }
+                : person
             )
           );
-          setMessage(
-            `'${newPerson.name}' edited`
-          )
+          setMessage(`'${newPerson.name}' edited`);
           setTimeout(() => {
-            setMessage(null)
-          }, 5000)
+            setMessage(null);
+          }, 5000);
         });
       }
-
     }
     setNewName("");
     setNewNumber("");
@@ -81,7 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} notificationType={notificationType} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
       <h2>add a new</h2>
